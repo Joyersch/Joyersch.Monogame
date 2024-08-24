@@ -1,6 +1,6 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Joyersch.Monogame", "Joyersch.Monogame\Joyersch.Monogame.csproj", "{9361108F-710C-47BE-9012-D117D33C47A5}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Joyersch.Monogame", "Joyersch.Monogame.csproj", "{9361108F-710C-47BE-9012-D117D33C47A5}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SolutionItems", "SolutionItems", "{81FE4AF0-3B63-403D-A195-C9BF7FA77FAA}"
 	ProjectSection(SolutionItems) = preProject
