@@ -8,7 +8,7 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\MonoUtils\MonoUtils\MonoUtils.csproj" />
+      <ProjectReference Include="..\lib\MonoUtils\MonoUtils.csproj" />
     </ItemGroup>
 
     <ItemGroup>
