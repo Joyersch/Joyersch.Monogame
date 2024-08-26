@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
@@ -8,6 +6,7 @@ using MonoUtils.Logic.Management;
 using MonoUtils.Ui;
 using MonoUtils.Ui.TextSystem;
 using MonoUtils.Logic;
+using MonoUtils.Ui.Color;
 
 namespace Joyersch.Monogame;
 
@@ -16,40 +15,79 @@ public class Titlecard : IManageable
     public static Texture2D Texture;
     public event Action FinishedScene;
 
-    private List<Text> _display;
+    private Text _byText;
     private readonly Scene _scene;
+    private readonly NeyaFace _neyaFace;
+    private ColorTransition _colorTransition;
+    private OverTimeInvoker _overTimeInvoker;
+
+    private float _firstHold = 500F;
+    private float _faceInTime = 2000F;
+    private float _secondHold = 2500F;
+    private float _faceOutTime = 1500F;
+    private float _thirdHold = 500F;
 
     public Rectangle Rectangle => _scene.Camera.Rectangle;
 
     public Titlecard(Scene scene)
     {
         _scene = scene;
-        _display = new List<Text>();
-        for (int i = 0; i < 40; i++)
-        {
-            var text = new Text("000000000000000000000000000000000000000000000000000", _scene.Display.SimpleScale);
-            text.InRectangle(_scene.Camera.Rectangle)
-                .OnCenter()
-                .OnY(0.1F + 0.85F * (i / 40F))
-                .Centered()
-                .Move();
-            _display.Add(text);
-        }
+        float scale = 1.5F;
+        _neyaFace = new NeyaFace(scene, scale);
+        _neyaFace.InRectangle(_scene.Camera.Rectangle)
+            .OnCenter()
+            .OnY(0.4F)
+            .Centered()
+            .Move();
 
+        _byText = new Text("A game by Joyersch...", _scene.Display.SimpleScale * scale);
+        _byText.InRectangle(_scene.Camera.Rectangle)
+            .OnCenter()
+            .OnY(0.75F)
+            .Centered()
+            .Move();
+
+        _colorTransition = new ColorTransition(Color.Transparent, Color.Transparent, 0F);
+        _overTimeInvoker = new OverTimeInvoker(_firstHold)
+        {
+            InvokeOnce = true
+        };
+        _overTimeInvoker.Trigger += delegate
+        {
+            _colorTransition = new ColorTransition(Color.Transparent, Color.White, _faceInTime);
+            _colorTransition.FinishedTransition += delegate { _overTimeInvoker?.Start(); };
+            _overTimeInvoker = new OverTimeInvoker(_secondHold, false)
+            {
+                InvokeOnce = true
+            };
+            _overTimeInvoker.Trigger += delegate
+            {
+                _colorTransition = new ColorTransition(Color.White, Color.Transparent, _faceOutTime);
+                _overTimeInvoker = new OverTimeInvoker(_thirdHold, false)
+                {
+                    InvokeOnce = true
+                };
+                _colorTransition.FinishedTransition += delegate { _overTimeInvoker.Start(); };
+                _overTimeInvoker.Trigger += delegate { FinishedScene?.Invoke(); };
+            };
+        };
     }
 
-    public static void LoadContent(ContentManager contentManager)
+    public static void LoadContent(ContentManager content)
     {
-        Texture = contentManager.GetTexture("Titlecard");
+        Texture = content.GetTexture("Titlecard/Background");
+        NeyaFace.LoadContent(content);
     }
 
     public void Update(GameTime gameTime)
     {
-        foreach (var text in _display)
-            text.Update(gameTime);
+        _colorTransition.Update(gameTime);
+        var color = _colorTransition.GetColor()[0];
+        _neyaFace.ChangeColor([color]);
+        _byText.ChangeColor(color);
+        _byText.Update(gameTime);
 
-        if (Keyboard.GetState().IsKeyDown(Keys.F))
-            FinishedScene.Invoke();
+        _overTimeInvoker.Update(gameTime);
     }
 
     public void Draw(SpriteBatch spriteBatch)
@@ -61,11 +99,12 @@ public class Titlecard : IManageable
             Color.White,
             0, /*Rotation*/
             Vector2.Zero,
-            Vector2.One * 10 * _scene.Display.SimpleScale * 1 /_scene.Camera.Zoom,
+            Vector2.One * 10 * _scene.Display.SimpleScale * 1 / _scene.Camera.Zoom,
             SpriteEffects.None,
             0 /*Layer*/);
 
-        foreach (var text in _display)
-            text.Draw(spriteBatch);
+        _byText.Draw(spriteBatch);
+
+        _neyaFace.Draw(spriteBatch);
     }
 }
