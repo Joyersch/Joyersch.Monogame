@@ -25,7 +25,7 @@ public class NeyaFace : IDrawable, IColorable, IMoveable
     {
         _scene = scene;
         _color = Color.White;
-        _size = new Vector2(128, 128) * scene.Display.SimpleScale * scale;
+        _size = new Vector2(128, 128) * scene.Display.Scale * scale;
         Rectangle = new Rectangle(_position.ToPoint(), _size.ToPoint());
     }
 

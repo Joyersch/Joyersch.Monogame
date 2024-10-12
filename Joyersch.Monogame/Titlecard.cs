@@ -22,9 +22,9 @@ public class Titlecard : IManageable
     private OverTimeInvoker _overTimeInvoker;
 
     private float _firstHold = 500F;
-    private float _faceInTime = 2000F;
-    private float _secondHold = 2500F;
-    private float _faceOutTime = 1500F;
+    private float _faceInTime = 850F;
+    private float _secondHold = 1750F;
+    private float _faceOutTime = 850F;
     private float _thirdHold = 500F;
 
     public Rectangle Rectangle => _scene.Camera.Rectangle;
@@ -32,20 +32,20 @@ public class Titlecard : IManageable
     public Titlecard(Scene scene)
     {
         _scene = scene;
-        float scale = 1.5F;
+        float scale = 3F;
         _neyaFace = new NeyaFace(scene, scale);
-        _neyaFace.InRectangle(_scene.Camera.Rectangle)
-            .OnCenter()
+        _neyaFace.InRectangle(_scene.Camera)
+            .OnX(0.5F)
             .OnY(0.4F)
             .Centered()
-            .Move();
+            .Apply();
 
-        _byText = new Text("A game by Joyersch...", _scene.Display.SimpleScale * scale);
-        _byText.InRectangle(_scene.Camera.Rectangle)
-            .OnCenter()
+        _byText = new Text("A game by Joyersch...", _scene.Display.Scale * scale);
+        _byText.InRectangle(_scene.Camera)
+            .OnX(0.5F)
             .OnY(0.75F)
             .Centered()
-            .Move();
+            .Apply();
 
         _colorTransition = new ColorTransition(Color.Transparent, Color.Transparent, 0F);
         _overTimeInvoker = new OverTimeInvoker(_firstHold)
@@ -81,6 +81,12 @@ public class Titlecard : IManageable
 
     public void Update(GameTime gameTime)
     {
+        if (Keyboard.GetState().GetPressedKeyCount() > 0
+            || Mouse.GetState().LeftButton == ButtonState.Pressed
+            || Mouse.GetState().RightButton == ButtonState.Pressed
+            || Mouse.GetState().MiddleButton == ButtonState.Pressed)
+            FinishedScene?.Invoke();
+
         _colorTransition.Update(gameTime);
         var color = _colorTransition.GetColor()[0];
         _neyaFace.ChangeColor([color]);
@@ -99,7 +105,7 @@ public class Titlecard : IManageable
             Color.White,
             0, /*Rotation*/
             Vector2.Zero,
-            Vector2.One * 10 * _scene.Display.SimpleScale * 1 / _scene.Camera.Zoom,
+            Vector2.One * 10 * _scene.Display.Scale,
             SpriteEffects.None,
             0 /*Layer*/);
 
