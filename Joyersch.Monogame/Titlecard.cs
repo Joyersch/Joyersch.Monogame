@@ -40,7 +40,7 @@ public class Titlecard : IManageable
             .Centered()
             .Apply();
 
-        _byText = new Text("A game by Joyersch...", _scene.Display.Scale * scale);
+        _byText = new Text("Joyersch presents...", _scene.Display.Scale * scale);
         _byText.InRectangle(_scene.Camera)
             .OnX(0.5F)
             .OnY(0.75F)
