@@ -1,5 +1,6 @@
 using Joyersch.Monogame.Console;
 using Joyersch.Monogame.Ui;
+using Joyersch.Monogame.Ui.Text;
 using Microsoft.Xna.Framework;
 
 namespace Joyersch.Monogame.Logging;

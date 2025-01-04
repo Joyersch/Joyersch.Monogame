@@ -157,8 +157,8 @@ public sealed class DevConsole : IManageable
     {
         _background.Draw(spriteBatch);
 
-        foreach (BasicText text in _lines)
-            text.Draw(spriteBatch);
+        foreach (BasicText BasicText in _lines)
+            BasicText.Draw(spriteBatch);
         _inputDisplay.Draw(spriteBatch);
         if (_isDrawingCursor)
             _cursorDisplay.Draw(spriteBatch);

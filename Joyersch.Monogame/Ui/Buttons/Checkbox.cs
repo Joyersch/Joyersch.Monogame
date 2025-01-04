@@ -25,17 +25,17 @@ public class Checkbox : TextButton<SquareButton>
     public Checkbox(float scale, bool state) : base(string.Empty, new SquareButton(Vector2.Zero, scale))
     {
         _checked = state;
-        BasicText.ChangeText(_checked ? "[checkmark]" : "[crossout]");
-        BasicText.ChangeColor(new[] { _checked ? Microsoft.Xna.Framework.Color.Green : Microsoft.Xna.Framework.Color.Red });
+        Text.ChangeText(_checked ? "[checkmark]" : "[crossout]");
+        Text.ChangeColor(new[] { _checked ? Microsoft.Xna.Framework.Color.Green : Microsoft.Xna.Framework.Color.Red });
         Click += delegate
         {
             _checked = !_checked;
-            BasicText.ChangeText(_checked ? "[checkmark]" : "[crossout]");
-            BasicText.ChangeColor(new[]
+            Text.ChangeText(_checked ? "[checkmark]" : "[crossout]");
+            Text.ChangeColor(new[]
                 { _checked ? Microsoft.Xna.Framework.Color.Green : Microsoft.Xna.Framework.Color.Red });
             ValueChanged?.Invoke(_checked);
         };
-        // Update BasicText
+        // Update Text
         Move(GetPosition());
     }
 

@@ -6,7 +6,7 @@ namespace Joyersch.Monogame.Ui.Buttons;
 
 public class TextButton<T> : IButton where T : IButton
 {
-    public BasicText BasicText { get; }
+    public BasicText Text { get; }
 
     private T _button;
     public Rectangle[] Hitbox => _button.Hitbox;
@@ -25,8 +25,8 @@ public class TextButton<T> : IButton where T : IButton
         _button.Leave += _ => Leave?.Invoke(this);
         _button.Enter += _ => Enter?.Invoke(this);
         _button.Click += _ => Click?.Invoke(this);
-        BasicText = new BasicText(text, scale * BasicText.DefaultLetterScale);
-        BasicText.InRectangle(_button)
+        Text = new BasicText(text, scale * BasicText.DefaultLetterScale);
+        Text.InRectangle(_button)
             .OnCenter()
             .Centered()
             .Apply();
@@ -46,8 +46,8 @@ public class TextButton<T> : IButton where T : IButton
     public virtual void Update(GameTime gameTime)
     {
         _button.Update(gameTime);
-        BasicText.Update(gameTime);
-        BasicText.InRectangle(_button)
+        Text.Update(gameTime);
+        Text.InRectangle(_button)
             .OnCenter()
             .Centered()
             .Apply();
@@ -61,7 +61,7 @@ public class TextButton<T> : IButton where T : IButton
     public virtual void Draw(SpriteBatch spriteBatch)
     {
         _button.Draw(spriteBatch);
-        BasicText.Draw(spriteBatch);
+        Text.Draw(spriteBatch);
     }
 
     public Vector2 GetPosition()
@@ -73,7 +73,7 @@ public class TextButton<T> : IButton where T : IButton
     public void Move(Vector2 newPosition)
     {
         _button.Move(newPosition);
-        BasicText.InRectangle(_button)
+        Text.InRectangle(_button)
             .OnCenter()
             .Centered()
             .Apply();
@@ -91,6 +91,6 @@ public class TextButton<T> : IButton where T : IButton
     public void SetScale(float scale)
     {
         _button.SetScale(scale);
-        BasicText.SetScale(scale);
+        Text.SetScale(scale);
     }
 }

@@ -75,10 +75,10 @@ public class ValueSelection<T> : IManageable, IMoveable, IInteractable, IScaleab
         _longestValidValue = 0;
         foreach (var validValue in ValidValues)
         {
-            var text = new BasicText(validValue.ToString());
-            text.SetScale(_extendedScale);
-            if (_longestValidValue < text.Rectangle.Width)
-                _longestValidValue = text.Rectangle.Width;
+            var BasicText = new BasicText(validValue.ToString());
+            BasicText.SetScale(_extendedScale);
+            if (_longestValidValue < BasicText.Rectangle.Width)
+                _longestValidValue = BasicText.Rectangle.Width;
         }
 
         var buttonLength = _decreaseButton.Rectangle.Width + 8;
