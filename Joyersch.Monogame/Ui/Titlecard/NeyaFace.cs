@@ -1,18 +1,16 @@
+using Joyersch.Monogame.Ui.Color;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
-using MonoUtils.Logic;
-using MonoUtils.Ui;
-using MonoUtils.Ui.Color;
-using IDrawable = MonoUtils.Logic.IDrawable;
+using IDrawable = Joyersch.Monogame.IDrawable;
 
-namespace Joyersch.Monogame;
+namespace Joyersch.Monogame.Ui.Titlecard;
 
 public class NeyaFace : IDrawable, IColorable, IMoveable
 {
     public static Texture2D Texture;
 
-    private Color _color;
+    private Microsoft.Xna.Framework.Color _color;
     private readonly Scene _scene;
 
     private Vector2 _position;
@@ -24,7 +22,7 @@ public class NeyaFace : IDrawable, IColorable, IMoveable
     public NeyaFace(Scene scene, float scale)
     {
         _scene = scene;
-        _color = Color.White;
+        _color = Microsoft.Xna.Framework.Color.White;
         _size = new Vector2(128, 128) * scene.Display.Scale * scale;
         Rectangle = new Rectangle(_position.ToPoint(), _size.ToPoint());
     }
@@ -39,13 +37,13 @@ public class NeyaFace : IDrawable, IColorable, IMoveable
         spriteBatch.Draw(Texture, Rectangle, _color);
     }
 
-    public void ChangeColor(Color[] input)
+    public void ChangeColor(Microsoft.Xna.Framework.Color[] input)
         => _color = input[0];
 
     public int ColorLength()
         => 1;
 
-    public Color[] GetColor()
+    public Microsoft.Xna.Framework.Color[] GetColor()
         => [_color];
 
     public Vector2 GetPosition() => _position;

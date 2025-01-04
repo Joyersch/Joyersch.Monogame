@@ -1,4 +1,4 @@
-namespace Joyersch.Monogame;
+namespace Joyersch.Monogame.Storage;
 
 public class Saves
 {

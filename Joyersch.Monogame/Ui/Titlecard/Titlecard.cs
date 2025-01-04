@@ -1,21 +1,18 @@
-﻿using Microsoft.Xna.Framework;
+﻿using Joyersch.Monogame.Ui.Color;
+using Joyersch.Monogame.Ui.Text;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
-using MonoUtils.Logic.Management;
-using MonoUtils.Ui;
-using MonoUtils.Ui.TextSystem;
-using MonoUtils.Logic;
-using MonoUtils.Ui.Color;
 
-namespace Joyersch.Monogame;
+namespace Joyersch.Monogame.Ui.Titlecard;
 
 public class Titlecard : IManageable
 {
     public static Texture2D Texture;
     public event Action FinishedScene;
 
-    private Text _byText;
+    private BasicText _byBasicText;
     private readonly Scene _scene;
     private readonly NeyaFace _neyaFace;
     private ColorTransition _colorTransition;
@@ -40,21 +37,21 @@ public class Titlecard : IManageable
             .Centered()
             .Apply();
 
-        _byText = new Text("Joyersch presents...", _scene.Display.Scale * scale);
-        _byText.InRectangle(_scene.Camera)
+        _byBasicText = new BasicText("Joyersch presents...", _scene.Display.Scale * scale);
+        _byBasicText.InRectangle(_scene.Camera)
             .OnX(0.5F)
             .OnY(0.75F)
             .Centered()
             .Apply();
 
-        _colorTransition = new ColorTransition(Color.Transparent, Color.Transparent, 0F);
+        _colorTransition = new ColorTransition(Microsoft.Xna.Framework.Color.Transparent, Microsoft.Xna.Framework.Color.Transparent, 0F);
         _overTimeInvoker = new OverTimeInvoker(_firstHold)
         {
             InvokeOnce = true
         };
         _overTimeInvoker.Trigger += delegate
         {
-            _colorTransition = new ColorTransition(Color.Transparent, Color.White, _faceInTime);
+            _colorTransition = new ColorTransition(Microsoft.Xna.Framework.Color.Transparent, Microsoft.Xna.Framework.Color.White, _faceInTime);
             _colorTransition.FinishedTransition += delegate { _overTimeInvoker?.Start(); };
             _overTimeInvoker = new OverTimeInvoker(_secondHold, false)
             {
@@ -62,7 +59,7 @@ public class Titlecard : IManageable
             };
             _overTimeInvoker.Trigger += delegate
             {
-                _colorTransition = new ColorTransition(Color.White, Color.Transparent, _faceOutTime);
+                _colorTransition = new ColorTransition(Microsoft.Xna.Framework.Color.White, Microsoft.Xna.Framework.Color.Transparent, _faceOutTime);
                 _overTimeInvoker = new OverTimeInvoker(_thirdHold, false)
                 {
                     InvokeOnce = true
@@ -90,8 +87,8 @@ public class Titlecard : IManageable
         _colorTransition.Update(gameTime);
         var color = _colorTransition.GetColor()[0];
         _neyaFace.ChangeColor([color]);
-        _byText.ChangeColor(color);
-        _byText.Update(gameTime);
+        _byBasicText.ChangeColor(color);
+        _byBasicText.Update(gameTime);
 
         _overTimeInvoker.Update(gameTime);
     }
@@ -102,14 +99,14 @@ public class Titlecard : IManageable
             Texture,
             _scene.Camera.RealPosition,
             null,
-            Color.White,
+            Microsoft.Xna.Framework.Color.White,
             0, /*Rotation*/
             Vector2.Zero,
             Vector2.One * 10 * _scene.Display.Scale,
             SpriteEffects.None,
             0 /*Layer*/);
 
-        _byText.Draw(spriteBatch);
+        _byBasicText.Draw(spriteBatch);
 
         _neyaFace.Draw(spriteBatch);
     }
