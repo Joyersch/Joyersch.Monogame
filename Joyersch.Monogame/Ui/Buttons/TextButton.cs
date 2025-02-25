@@ -8,9 +8,9 @@ public class TextButton<T> : IButton where T : IButton
 {
     public BasicText Text { get; }
 
-    private T _button;
-    public Rectangle[] Hitbox => _button.Hitbox;
-    public Rectangle Rectangle => _button.Rectangle;
+    public T Button;
+    public Rectangle[] Hitbox => Button.Hitbox;
+    public Rectangle Rectangle => Button.Rectangle;
     public event Action<object>? Leave;
     public event Action<object>? Enter;
     public event Action<object>? Click;
@@ -21,12 +21,12 @@ public class TextButton<T> : IButton where T : IButton
 
     public TextButton(string text, float scale, T button)
     {
-        _button = button;
-        _button.Leave += _ => Leave?.Invoke(this);
-        _button.Enter += _ => Enter?.Invoke(this);
-        _button.Click += _ => Click?.Invoke(this);
+        Button = button;
+        Button.Leave += _ => Leave?.Invoke(this);
+        Button.Enter += _ => Enter?.Invoke(this);
+        Button.Click += _ => Click?.Invoke(this);
         Text = new BasicText(text, scale * BasicText.DefaultLetterScale);
-        Text.InRectangle(_button)
+        Text.InRectangle(Button)
             .OnCenter()
             .Centered()
             .Apply();
@@ -34,20 +34,20 @@ public class TextButton<T> : IButton where T : IButton
 
     public float Layer
     {
-        get => _button.Layer;
-        set => _button.Layer = value;
+        get => Button.Layer;
+        set => Button.Layer = value;
     }
 
-    public bool IsHover => _button.IsHover;
+    public bool IsHover => Button.IsHover;
 
-    public float Scale => _button.Scale;
+    public float Scale => Button.Scale;
 
 
     public virtual void Update(GameTime gameTime)
     {
-        _button.Update(gameTime);
+        Button.Update(gameTime);
         Text.Update(gameTime);
-        Text.InRectangle(_button)
+        Text.InRectangle(Button)
             .OnCenter()
             .Centered()
             .Apply();
@@ -55,42 +55,42 @@ public class TextButton<T> : IButton where T : IButton
 
     public void UpdateInteraction(GameTime gameTime, IHitbox toCheck)
     {
-        _button.UpdateInteraction(gameTime, toCheck);
+        Button.UpdateInteraction(gameTime, toCheck);
     }
 
     public virtual void Draw(SpriteBatch spriteBatch)
     {
-        _button.Draw(spriteBatch);
+        Button.Draw(spriteBatch);
         Text.Draw(spriteBatch);
     }
 
     public Vector2 GetPosition()
-        => _button.GetPosition();
+        => Button.GetPosition();
 
     public Vector2 GetSize()
-        => _button.GetSize();
+        => Button.GetSize();
 
     public void Move(Vector2 newPosition)
     {
-        _button.Move(newPosition);
-        Text.InRectangle(_button)
+        Button.Move(newPosition);
+        Text.InRectangle(Button)
             .OnCenter()
             .Centered()
             .Apply();
     }
 
     public void ChangeColor(Microsoft.Xna.Framework.Color[] input)
-        => _button.ChangeColor(input);
+        => Button.ChangeColor(input);
 
     public int ColorLength()
-        => _button.ColorLength();
+        => Button.ColorLength();
 
     public Microsoft.Xna.Framework.Color[] GetColor()
-        => _button.GetColor();
+        => Button.GetColor();
 
     public void SetScale(float scale)
     {
-        _button.SetScale(scale);
+        Button.SetScale(scale);
         Text.SetScale(scale);
     }
 }
