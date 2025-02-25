@@ -41,7 +41,7 @@ public sealed class AnimationProvider : IUpdateable
 
     private void CalculateImageLocation()
     {
-        if (_animationFrames <= 1)
+        if (_animationFrames < 1)
             return;
 
         _currentAnimationFrame++;
