@@ -17,7 +17,7 @@ public class Letter : IMoveable, IManageable, IRotateable
 
     private static List<ILetter> LetterOptions;
 
-    private string _identifier;
+    public string Identifier;
     private Texture2D _resolvedTexture;
     private Rectangle _resolvedLocation;
 
@@ -39,7 +39,7 @@ public class Letter : IMoveable, IManageable, IRotateable
     {
         _resolvedTexture = null;
         _resolvedLocation = Rectangle.Empty;
-        _identifier = identifier;
+        Identifier = identifier;
 
         foreach (ILetter letter in LetterOptions)
         {
@@ -134,5 +134,10 @@ public class Letter : IMoveable, IManageable, IRotateable
     }
 
     public override string ToString()
-        => _identifier;
+        => Identifier;
+
+    public void UseTextureData(TextureDataCallback callback)
+        => callback.Invoke(_resolvedTexture, ref _resolvedLocation);
+
+    public delegate void TextureDataCallback(Texture2D texture, ref Rectangle rectangle);
 }
