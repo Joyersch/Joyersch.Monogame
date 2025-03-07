@@ -9,6 +9,11 @@ public sealed class Display : IRectangle, IScaleable
     private readonly Vector2 _expectedSize;
 
     /// <summary>
+    /// The base size of game space.
+    /// </summary>
+    public Vector2 BaseSize => _expectedSize;
+
+    /// <summary>
     /// Rectangle of the current screen
     /// </summary>
     public Rectangle Window => _device.PresentationParameters.Bounds;
