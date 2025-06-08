@@ -22,6 +22,8 @@ public class ExtendedGame : Game
 
     protected string SaveDirectory = "saves";
     protected string SaveFile = string.Empty;
+    protected string SavePrefix = "save";
+    protected string SaveType = "json";
 
     protected float CameraZoom = 1F;
 
@@ -60,6 +62,8 @@ public class ExtendedGame : Game
 
         SettingsAndSaveManager = new SettingsAndSaveManager<string>(SaveDirectory, SaveFile);
         SettingsAndSaveManager.SetSaveFile(SaveFile);
+        SettingsAndSaveManager.SaveFilePrefix = SavePrefix;
+        SettingsAndSaveManager.SaveFileType = SaveType;
 
         if (!SettingsAndSaveManager.LoadSettings())
             SettingsAndSaveManager.SaveSettings();
