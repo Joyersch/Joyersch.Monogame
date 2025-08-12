@@ -54,5 +54,8 @@ public sealed class MouseActionsMat : IMouseActions, IInteractable, IHitbox
     public Rectangle[] Hitbox => _toCover.Hitbox;
 
     public static void ResetState()
-        => _wasPressed = Mouse.GetState().LeftButton == ButtonState.Pressed;
+        => _wasPressed = LeftClicked;
+
+    public static bool LeftClicked
+        => Mouse.GetState().LeftButton == ButtonState.Pressed;
 }
