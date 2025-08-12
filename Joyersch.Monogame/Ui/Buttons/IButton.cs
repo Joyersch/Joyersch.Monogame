@@ -1,7 +1,7 @@
 ﻿
 namespace Joyersch.Monogame.Ui.Buttons
 {
-    public interface IButton : IHitbox, IManageable, IMoveable, IColorable, IMouseActions, IInteractable, ILayerable, IScaleable
+    public interface IButton : IUserInferface, IMoveable, IColorable, IMouseActions, ILayerable, IScaleable
     {
         public bool IsHover { get; }
     }

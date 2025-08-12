@@ -19,7 +19,7 @@ public sealed class InteractHandler : IInteractable
     public bool UpdateInteraction(GameTime gameTime, IHitbox toCheck)
     {
         bool @return = false;
-        foreach (var element in _interactables.OrderBy(i => i.zIndex))
+        foreach (var element in _interactables.OrderByDescending(i => i.zIndex))
         {
             @return |= element.interactable.UpdateInteraction(gameTime, toCheck);
             if (@return)
