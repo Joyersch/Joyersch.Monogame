@@ -29,10 +29,8 @@ public sealed class LockButtonAddon : ButtonAddon
         Lock();
     }
 
-    public override void UpdateInteraction(GameTime gameTime, IHitbox toCheck)
-    {
-        Button.UpdateInteraction(gameTime, !IsLocked ? toCheck : new EmptyHitbox());
-    }
+    public override bool UpdateInteraction(GameTime gameTime, IHitbox toCheck)
+        => Button.UpdateInteraction(gameTime, !IsLocked ? toCheck : new EmptyHitbox());
 
     public override void Update(GameTime gameTime)
     {

@@ -84,10 +84,8 @@ public class RatioBox : IButton
         _imageLocation = new Rectangle((int)(Selected ? ImageSize.X : 0), 0, (int)ImageSize.X, (int)ImageSize.Y);
     }
 
-    public void UpdateInteraction(GameTime gameTime, IHitbox toCheck)
-    {
-        _mouseMat.UpdateInteraction(gameTime, toCheck);
-    }
+    public bool UpdateInteraction(GameTime gameTime, IHitbox toCheck)
+        => _mouseMat.UpdateInteraction(gameTime, toCheck);
 
     public void Update(GameTime gameTime)
     {
@@ -131,7 +129,7 @@ public class RatioBox : IButton
 
     public Microsoft.Xna.Framework.Color[] GetColor()
         => [_color];
-    
+
     public void SetScale(float scale)
     {
         _extendedScale = scale;

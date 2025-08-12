@@ -28,10 +28,8 @@ public class ButtonAddon : IButton
         Button = button;
     }
 
-    public virtual void UpdateInteraction(GameTime gameTime, IHitbox toCheck)
-    {
-        Button.UpdateInteraction(gameTime, toCheck);
-    }
+    public virtual bool UpdateInteraction(GameTime gameTime, IHitbox toCheck)
+        => Button.UpdateInteraction(gameTime, toCheck);
 
     public virtual void Update(GameTime gameTime)
     {
@@ -73,5 +71,5 @@ public class ButtonAddon : IButton
     public float Scale => Button.Scale;
 
     public virtual void SetScale(float scale)
-    => Button.SetScale(scale);
+        => Button.SetScale(scale);
 }

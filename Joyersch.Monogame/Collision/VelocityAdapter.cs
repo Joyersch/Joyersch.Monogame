@@ -25,8 +25,9 @@ public class VelocityAdapter<T> : IManageable, IInteractable where T : IMoveable
         Object.Draw(spriteBatch);
     }
 
-    public void UpdateInteraction(GameTime gameTime, IHitbox toCheck)
+    public bool UpdateInteraction(GameTime gameTime, IHitbox toCheck)
     {
+        bool @return = false;
         var time = (float) gameTime.ElapsedGameTime.TotalMinutes;
         var hitboxes = toCheck.Hitbox.ToList();
         var velocityRange = Rectangle.Union(Object.Rectangle
@@ -48,10 +49,12 @@ public class VelocityAdapter<T> : IManageable, IInteractable where T : IMoveable
                 Velocity += ContactNormal *
                             new Vector2(Math.Abs(Velocity.X), Math.Abs(Velocity.Y)) *
                             (1 - ContactTime);
+                @return = true;
             }
         }
 
         Object.Move(Object.GetPosition() + Velocity * time);
+        return @return;
     }
 
     public Rectangle[] Hitbox => Object.Hitbox;

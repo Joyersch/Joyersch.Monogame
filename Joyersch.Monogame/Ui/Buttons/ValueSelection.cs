@@ -10,6 +10,22 @@ public class ValueSelection<T> : IManageable, IMoveable, IInteractable, IScaleab
     private readonly SquareTextButton _decreaseButton;
     private readonly SquareTextButton _increaseButton;
 
+    public Rectangle[] Hitbox
+    {
+        get
+        {
+            if (_hitbox.Length > 0)
+                return _hitbox;
+
+            List<Rectangle> recs = [];
+            recs.AddRange(_decreaseButton.Hitbox);
+            recs.AddRange(_increaseButton.Hitbox);
+            _hitbox = recs.ToArray();
+            return _hitbox;
+        }
+}
+    private Rectangle[] _hitbox = [];
+
     private Vector2 _position;
     private Vector2 _size;
     private Rectangle _rectangle;
@@ -75,10 +91,10 @@ public class ValueSelection<T> : IManageable, IMoveable, IInteractable, IScaleab
         _longestValidValue = 0;
         foreach (var validValue in ValidValues)
         {
-            var BasicText = new BasicText(validValue.ToString());
-            BasicText.SetScale(_extendedScale);
-            if (_longestValidValue < BasicText.Rectangle.Width)
-                _longestValidValue = BasicText.Rectangle.Width;
+            var basicText = new BasicText(validValue.ToString());
+            basicText.SetScale(_extendedScale);
+            if (_longestValidValue < basicText.Rectangle.Width)
+                _longestValidValue = basicText.Rectangle.Width;
         }
 
         var buttonLength = _decreaseButton.Rectangle.Width + 8;
@@ -108,10 +124,12 @@ public class ValueSelection<T> : IManageable, IMoveable, IInteractable, IScaleab
             .Apply();
     }
 
-    public void UpdateInteraction(GameTime gameTime, IHitbox toCheck)
+    public bool UpdateInteraction(GameTime gameTime, IHitbox toCheck)
     {
-        _increaseButton.UpdateInteraction(gameTime, toCheck);
-        _decreaseButton.UpdateInteraction(gameTime, toCheck);
+        bool @return = false;
+        @return |= _increaseButton.UpdateInteraction(gameTime, toCheck);
+        @return |= _decreaseButton.UpdateInteraction(gameTime, toCheck);
+        return @return;
     }
 
     public void Update(GameTime gameTime)

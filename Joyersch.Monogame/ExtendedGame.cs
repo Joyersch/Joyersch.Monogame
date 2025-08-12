@@ -84,6 +84,8 @@ public class ExtendedGame : Game
 
         if (IsConsoleActive && IsConsoleEnabled)
             Console.Update(gameTime);
+
+        MouseActionsMat.ResetState();
     }
 
     protected void DrawConsole()

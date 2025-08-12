@@ -59,14 +59,13 @@ public sealed class ClickableText : BasicText, IInteractable, IHitbox
     public override void Update(GameTime gameTime)
     {
         base.Update(gameTime);
-        _highlight.ChangeText(string.Concat(Enumerable.Repeat(".", (int)(Rectangle.Width / (_scale * _extendedScale)))));
+        _highlight.ChangeText(
+            string.Concat(Enumerable.Repeat(".", (int)(Rectangle.Width / (_scale * _extendedScale)))));
         _highlight.Update(gameTime);
     }
 
-    public void UpdateInteraction(GameTime gameTime, IHitbox toCheck)
-    {
-        _mouseActions.UpdateInteraction(gameTime, toCheck);
-    }
+    public bool UpdateInteraction(GameTime gameTime, IHitbox toCheck)
+        => _mouseActions.UpdateInteraction(gameTime, toCheck);
 
     public override void Draw(SpriteBatch spriteBatch)
     {

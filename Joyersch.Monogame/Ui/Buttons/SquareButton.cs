@@ -65,12 +65,14 @@ public sealed class SquareButton : IButton
         _mouseMat.Click +=_ => Click?.Invoke(this);
     }
 
-    public void UpdateInteraction(GameTime gameTime, IHitbox toCheck)
+    public bool UpdateInteraction(GameTime gameTime, IHitbox toCheck)
     {
-        _mouseMat.UpdateInteraction(gameTime, toCheck);
+        bool @return = false;
+        @return |= _mouseMat.UpdateInteraction(gameTime, toCheck);
 
         _imageLocation = new Rectangle(_mouseMat.IsHover ? (int)ImageSize.X : 0, 0,
             (int)ImageSize.X, (int)ImageSize.Y);
+        return @return;
     }
 
     public void Update(GameTime gameTime)

@@ -38,10 +38,8 @@ public sealed class Invisible : IManageable, IInteractable, IMouseActions, IHitb
         _mouseActionsMat.Leave += _ => Leave?.Invoke(this);
     }
 
-    public void UpdateInteraction(GameTime gameTime, IHitbox toCheck)
-    {
-        _mouseActionsMat.UpdateInteraction(gameTime, toCheck);
-    }
+    public bool UpdateInteraction(GameTime gameTime, IHitbox toCheck)
+        => _mouseActionsMat.UpdateInteraction(gameTime, toCheck);
 
 
     public Vector2 GetPosition()

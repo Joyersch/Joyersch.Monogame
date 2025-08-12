@@ -53,10 +53,8 @@ public class TextButton<T> : IButton where T : IButton
             .Apply();
     }
 
-    public void UpdateInteraction(GameTime gameTime, IHitbox toCheck)
-    {
-        Button.UpdateInteraction(gameTime, toCheck);
-    }
+    public bool UpdateInteraction(GameTime gameTime, IHitbox toCheck)
+        => Button.UpdateInteraction(gameTime, toCheck);
 
     public virtual void Draw(SpriteBatch spriteBatch)
     {

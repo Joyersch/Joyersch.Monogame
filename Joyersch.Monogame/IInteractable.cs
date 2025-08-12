@@ -2,7 +2,7 @@ using Microsoft.Xna.Framework;
 
 namespace Joyersch.Monogame;
 
-public interface IInteractable
+public interface IInteractable : IHitbox
 {
-    public void UpdateInteraction(GameTime gameTime, IHitbox toCheck);
+    public bool UpdateInteraction(GameTime gameTime, IHitbox toCheck);
 }

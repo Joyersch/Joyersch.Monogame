@@ -1,3 +1,4 @@
+using Joyersch.Monogame.Logging;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 
@@ -13,7 +14,7 @@ public sealed class MouseActionsMat : IMouseActions, IInteractable, IHitbox
     public event Action<object> Leave;
     public event Action<object> Enter;
     public event Action<object> Click;
-    private bool _wasPressed;
+    private static bool _wasPressed;
 
     public MouseActionsMat(IHitbox toCover, bool sendSelfAsInvoker = false)
     {
@@ -21,8 +22,9 @@ public sealed class MouseActionsMat : IMouseActions, IInteractable, IHitbox
         _sendSelfAsInvoker = sendSelfAsInvoker;
     }
 
-    public void UpdateInteraction(GameTime gameTime, IHitbox toCheck)
+    public bool UpdateInteraction(GameTime gameTime, IHitbox toCheck)
     {
+        bool @return = false;
         bool isMouseHovering = false;
         foreach (Rectangle rectangle in toCheck.Hitbox)
             if (_toCover.Hitbox.Any(h => h.Intersects(rectangle)))
@@ -35,13 +37,22 @@ public sealed class MouseActionsMat : IMouseActions, IInteractable, IHitbox
                 Enter?.Invoke(_sendSelfAsInvoker ? this : _toCover);
 
             if (!_wasPressed && isPressed)
+            {
                 Click?.Invoke(_sendSelfAsInvoker ? this : _toCover);
+                @return = true;
+                _wasPressed = true;
+            }
         }
         else if (_hover)
             Leave?.Invoke(_sendSelfAsInvoker ? this : _toCover);
+
         _hover = isMouseHovering;
-        _wasPressed = isPressed;
+
+        return @return;
     }
 
     public Rectangle[] Hitbox => _toCover.Hitbox;
+
+    public static void ResetState()
+        => _wasPressed = Mouse.GetState().LeftButton == ButtonState.Pressed;
 }
