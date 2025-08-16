@@ -26,6 +26,10 @@ public class BasicText : IColorable, IMoveable, IManageable, IScaleable
 
     public static float DefaultLetterScale { get; set; } = 2F;
 
+    public BasicText(float scale) : this(string.Empty, Vector2.Zero, scale, 1)
+    {
+    }
+
     public BasicText(string text) : this(text, Vector2.Zero, DefaultLetterScale, 1)
     {
     }
