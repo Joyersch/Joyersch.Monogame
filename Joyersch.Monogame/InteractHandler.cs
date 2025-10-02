@@ -28,4 +28,7 @@ public sealed class InteractHandler : IInteractable
 
         return @return;
     }
+
+    public void Clear()
+        => _interactables.Clear();
 }
