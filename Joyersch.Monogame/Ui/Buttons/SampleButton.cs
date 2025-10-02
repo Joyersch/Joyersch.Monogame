@@ -1,5 +1,4 @@
 ﻿using Joyersch.Monogame.Collision;
-using Joyersch.Monogame.Helpers;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
@@ -59,6 +58,7 @@ public sealed class SampleButton : IButton
         };
         _hitbox = new HitboxProvider(this, hitbox, _drawingScale);
         _rectangle = this.GetRectangle();
+        _imageLocation = new Rectangle(0, 0, (int)ImageSize.X, (int)ImageSize.Y);
 
         _mouseMat = new MouseActionsMat(this);
         _mouseMat.Leave += _ => Leave?.Invoke(this);
