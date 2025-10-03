@@ -35,6 +35,8 @@ public sealed class SquareButton : IButton
 
     public static float DefaultScale { get; set; } = 4F;
 
+    public bool SecondLayer { get; set; }
+
     public SquareButton() : this(Vector2.Zero)
     {
     }
@@ -62,7 +64,7 @@ public sealed class SquareButton : IButton
         _mouseMat = new MouseActionsMat(this);
         _mouseMat.Leave += _ => Leave?.Invoke(this);
         _mouseMat.Enter += _ => Enter?.Invoke(this);
-        _mouseMat.Click +=_ => Click?.Invoke(this);
+        _mouseMat.Click += _ => Click?.Invoke(this);
     }
 
     public bool UpdateInteraction(GameTime gameTime, IHitbox toCheck)
@@ -70,7 +72,7 @@ public sealed class SquareButton : IButton
         bool @return = false;
         @return |= _mouseMat.UpdateInteraction(gameTime, toCheck);
 
-        _imageLocation = new Rectangle(_mouseMat.IsHover ? (int)ImageSize.X : 0, 0,
+        _imageLocation = new Rectangle(_mouseMat.IsHover ? (int)ImageSize.X : 0, SecondLayer ? (int)ImageSize.Y : 0,
             (int)ImageSize.X, (int)ImageSize.Y);
         return @return;
     }

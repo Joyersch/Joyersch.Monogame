@@ -2,13 +2,25 @@ using Microsoft.Xna.Framework;
 
 namespace Joyersch.Monogame.Ui.Buttons;
 
-public class Checkbox : TextButton<SquareButton>
+public sealed class Checkbox : TextButton<SquareButton>
 {
     private bool _checked;
 
-    public Action<bool> ValueChanged;
+    public event Action<bool> ValueChanged;
 
     public static float DefaultScale { get; set; } = 4F;
+
+    public Microsoft.Xna.Framework.Color CheckedColor { get; set; } = Microsoft.Xna.Framework.Color.Green;
+    public Microsoft.Xna.Framework.Color UncheckedColor { get; set; } = Microsoft.Xna.Framework.Color.Red;
+
+    private Microsoft.Xna.Framework.Color TextColor => _checked ? CheckedColor : UncheckedColor;
+
+    public string CheckedText { get; set; } = "[checkmark]";
+    public string UncheckedText { get; set; } = "[crossout]";
+
+    private string TextValue => _checked ? CheckedText : UncheckedText;
+
+    public bool UseTexture { get; set; } = false;
 
     public Checkbox() : this(false)
     {
@@ -25,14 +37,23 @@ public class Checkbox : TextButton<SquareButton>
     public Checkbox(float scale, bool state) : base(string.Empty, new SquareButton(Vector2.Zero, scale))
     {
         _checked = state;
-        Text.ChangeText(_checked ? "[checkmark]" : "[crossout]");
-        Text.ChangeColor(new[] { _checked ? Microsoft.Xna.Framework.Color.Green : Microsoft.Xna.Framework.Color.Red });
+        if (!UseTexture)
+        {
+            Text.ChangeText(TextValue);
+            Text.ChangeColor([TextColor]);
+        }
+
         Click += delegate
         {
             _checked = !_checked;
-            Text.ChangeText(_checked ? "[checkmark]" : "[crossout]");
-            Text.ChangeColor(new[]
-                { _checked ? Microsoft.Xna.Framework.Color.Green : Microsoft.Xna.Framework.Color.Red });
+            if (UseTexture)
+                Button.SecondLayer = _checked;
+            else
+            {
+                Text.ChangeText(TextValue);
+                Text.ChangeColor([TextColor]);
+            }
+
             ValueChanged?.Invoke(_checked);
         };
         // Update Text
@@ -41,4 +62,10 @@ public class Checkbox : TextButton<SquareButton>
 
     public bool Checked()
         => _checked;
+
+    public bool Check()
+        => _checked = true;
+
+    public bool Unchecked()
+        => _checked = false;
 }
