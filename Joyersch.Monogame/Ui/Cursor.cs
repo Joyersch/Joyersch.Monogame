@@ -4,7 +4,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace Joyersch.Monogame.Ui;
 
-public sealed class Cursor : IMoveable, IHitbox, ILayerable, IManageable, IScaleable
+public sealed class Cursor : IMoveable, IHitbox, ILayerable, IManageable, IScaleable, IColorable
 {
     private Vector2 _position;
     private readonly float _initialScale;
@@ -13,6 +13,8 @@ public sealed class Cursor : IMoveable, IHitbox, ILayerable, IManageable, IScale
     public float Scale => _initialScale * _extendedScale;
     private Vector2 _baseSize = new Vector2(7, 10);
     private Vector2 _size;
+
+    private Microsoft.Xna.Framework.Color _color;
 
     private HitboxProvider _hitboxProvider;
 
@@ -45,6 +47,7 @@ public sealed class Cursor : IMoveable, IHitbox, ILayerable, IManageable, IScale
         var box = new Rectangle(0, 0, 1, 1);
         var hitbox = new[] { box };
         _hitboxProvider = new HitboxProvider(this, hitbox, _drawingScale);
+        _color = Microsoft.Xna.Framework.Color.White;
     }
 
     public void Update(GameTime gameTime)
@@ -59,7 +62,7 @@ public sealed class Cursor : IMoveable, IHitbox, ILayerable, IManageable, IScale
             Texture,
             PixelPerfect ? Vector2.Floor(_position) : _position,
             null,
-            Microsoft.Xna.Framework.Color.White,
+            _color,
             0F,
             Vector2.Zero,
             _drawingScale,
@@ -86,4 +89,13 @@ public sealed class Cursor : IMoveable, IHitbox, ILayerable, IManageable, IScale
         _rectangle = this.GetRectangle();
         _hitboxProvider.SetScale(_drawingScale);
     }
+
+    public void ChangeColor(Microsoft.Xna.Framework.Color[] input)
+        => _color = input[0];
+
+    public int ColorLength()
+        => 1;
+
+    public Microsoft.Xna.Framework.Color[] GetColor()
+        => [_color];
 }
