@@ -68,4 +68,10 @@ public sealed class Checkbox : TextButton<SquareButton>
 
     public bool Unchecked()
         => _checked = false;
+
+    public override void SetScale(float scale)
+    {
+        base.SetScale(scale);
+        Text.SetScale(scale);
+    }
 }

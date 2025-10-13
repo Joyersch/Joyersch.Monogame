@@ -86,7 +86,7 @@ public class TextButton<T> : IButton where T : IButton
     public Microsoft.Xna.Framework.Color[] GetColor()
         => Button.GetColor();
 
-    public void SetScale(float scale)
+    public virtual void SetScale(float scale)
     {
         Button.SetScale(scale);
         Text.SetScale(scale);
