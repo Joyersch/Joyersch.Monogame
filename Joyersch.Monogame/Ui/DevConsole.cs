@@ -58,7 +58,7 @@ public sealed class DevConsole : IManageable
         _maxLinesY = (int)(scene.Camera.Size / _maxBasicText.Size).Y - 1;
         _toDisplay = new List<BacklogRow>();
 
-        _background = new Blank(Vector2.Zero, scene.Display.Size)
+        _background = new Blank(Vector2.Zero, scene.Display.Size.X)
         {
             Color = new Microsoft.Xna.Framework.Color(0, 0, 0, 128)
         };
@@ -117,10 +117,14 @@ public sealed class DevConsole : IManageable
         if (Keyboard.GetState().IsKeyDown(Keys.Up) && !_keyUpDown)
         {
             _keyUpDown = true;
-            _priorPointer++;
-            if (_priorPointer >= _priorCommands.Count)
-                _priorPointer = _priorCommands.Count;
-            _input = _priorCommands[^_priorPointer];
+            if (_priorCommands.Count > 0)
+            {
+                _priorPointer++;
+                if (_priorPointer >= _priorCommands.Count)
+                    _priorPointer = _priorCommands.Count;
+           
+                _input = _priorCommands[^_priorPointer];
+            }
         }
 
         _keyUpDown = Keyboard.GetState().IsKeyDown(Keys.Up);

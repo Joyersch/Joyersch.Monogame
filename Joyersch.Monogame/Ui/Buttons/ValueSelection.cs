@@ -1,3 +1,4 @@
+using Joyersch.Monogame.Logging;
 using Joyersch.Monogame.Ui.Text;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -30,9 +31,9 @@ public class ValueSelection<T> : IManageable, IMoveable, IInteractable, IScaleab
     private Vector2 _size;
     private Rectangle _rectangle;
 
-    private float _initialScale;
-    private float _extendedScale = 1F;
-    public float Scale => _extendedScale * _extendedScale;
+    private readonly float _initialScale;
+    private float _extendedScale = 1f;
+    public float Scale => _extendedScale * _initialScale;
     public Rectangle Rectangle => _rectangle;
 
     private readonly string _left = "[left]";
@@ -49,6 +50,8 @@ public class ValueSelection<T> : IManageable, IMoveable, IInteractable, IScaleab
 
     public bool LoopOverValues;
 
+    private float _maxTextLength = 0f;
+
     public ValueSelection(Vector2 position, float initialScale, List<T> validValues, int startValueIndex)
     {
         ValidValues = validValues;
@@ -56,13 +59,22 @@ public class ValueSelection<T> : IManageable, IMoveable, IInteractable, IScaleab
         _initialScale = initialScale;
         _pointer = startValueIndex;
 
-        _decreaseButton = new SquareTextButton(_left, position, initialScale * SquareTextButton.DefaultScale);
+        _decreaseButton = new SquareTextButton(_left, position, initialScale * 4f);
         _decreaseButton.Click += DecreaseClicked;
 
-        _increaseButton = new SquareTextButton(_right, Vector2.Zero, Scale * SquareTextButton.DefaultScale);
+        _increaseButton = new SquareTextButton(_right, Vector2.Zero, initialScale * 4f);
         _increaseButton.Click += IncreaseClicked;
 
-        _display = new BasicText(validValues[_pointer].ToString(), Vector2.Zero, Scale * BasicText.DefaultLetterScale);
+        _display = new BasicText(validValues[_pointer].ToString(), Vector2.Zero, initialScale * 2f);
+
+        foreach (var value in validValues)
+        {
+            var display = new BasicText(value.ToString(), Vector2.Zero, 2f);
+            var length = display.Rectangle.Size.X;
+            if (length > _maxTextLength)
+                _maxTextLength = length;
+        }
+        
         UpdateTextValue();
     }
 
@@ -87,31 +99,15 @@ public class ValueSelection<T> : IManageable, IMoveable, IInteractable, IScaleab
     private void UpdateTextValue()
     {
         _display.ChangeText(Value);
+        float textLength = _maxTextLength * Scale + _decreaseButton.Rectangle.Size.X * 1.25f * 2f;
 
-        _longestValidValue = 0;
-        foreach (var validValue in ValidValues)
-        {
-            var basicText = new BasicText(validValue.ToString());
-            basicText.SetScale(_extendedScale);
-            if (_longestValidValue < basicText.Rectangle.Width)
-                _longestValidValue = basicText.Rectangle.Width;
-        }
-
-        var buttonLength = _decreaseButton.Rectangle.Width + 8;
-
-        var rectangle = new Rectangle(_position.ToPoint(),
-            new Vector2(_longestValidValue + buttonLength * 2, _decreaseButton.GetSize().Y).ToPoint());
-        _rectangle = rectangle;
-        _size = rectangle.Size.ToVector2();
+        _size = new Vector2(textLength, _decreaseButton.Rectangle.Size.Y);
+        _rectangle = new Rectangle(_position.ToPoint(), _size.ToPoint());
 
         _display.InRectangle(this)
             .OnCenter()
             .Centered()
             .Apply();
-
-        var halfText = _display.GetSize().X / 2;
-        var longestHalfText = _longestValidValue / 2;
-        var distance = (longestHalfText - halfText) / 2;
 
         _decreaseButton.GetAnchor(this)
             .SetMainAnchor(AnchorCalculator.Anchor.Left)
@@ -146,12 +142,12 @@ public class ValueSelection<T> : IManageable, IMoveable, IInteractable, IScaleab
         _decreaseButton.Draw(spriteBatch);
     }
 
-    public void SetScale(float scale)
+    public void SetScale(ScaleProvider provider)
     {
-        _display.SetScale(scale);
-        _increaseButton.SetScale(scale);
-        _decreaseButton.SetScale(scale);
-        _extendedScale = scale;
+        _display.SetScale(provider);
+        _increaseButton.SetScale(provider);
+        _decreaseButton.SetScale(provider);
+        _extendedScale = provider.Scale;
         UpdateTextValue();
     }
 

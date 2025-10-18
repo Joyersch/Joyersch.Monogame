@@ -50,7 +50,7 @@ public sealed class Timer : IManageable, IMoveable, IColorable, IScaleable
             Trigger?.Invoke();
         };
 
-        _display = new BasicText($"{time/1000:n2}", position, scale * BasicText.DefaultLetterScale);
+        _display = new BasicText($"{time/1000:n2}", position, scale * 2f);
     }
 
     public Rectangle Rectangle => _invoker.Rectangle;
@@ -108,8 +108,8 @@ public sealed class Timer : IManageable, IMoveable, IColorable, IScaleable
         _invoker.Reset();
     }
 
-    public void SetScale(float scale)
+    public void SetScale(ScaleProvider provider)
     {
-        _display.SetScale(scale);
+        _display.SetScale(provider);
     }
 }

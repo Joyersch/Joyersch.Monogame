@@ -53,10 +53,10 @@ public sealed class Display : IRectangle, IScaleable
     }
 
     /// <summary>
-    /// This does nothing. Calls will be ignored. This exists for Interface complience
+    /// This does nothing. Calls will be ignored. This exists for Interface compliance
     /// </summary>
     /// <param name="scale"></param>
-    public void SetScale(float scale)
+    public void SetScale(ScaleProvider scale)
     {
         // Ignored
     }

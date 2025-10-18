@@ -4,8 +4,7 @@ namespace Joyersch.Monogame.Ui.Buttons;
 
 public sealed class SquareTextButton : TextButton<SquareButton>
 {
-    public static float DefaultScale { get; set; } = 4F;
-
+    private static readonly float DefaultScale = 4f;
     public SquareTextButton(string text) : this(text, Vector2.Zero)
     {
     }

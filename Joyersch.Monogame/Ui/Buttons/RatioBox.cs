@@ -15,7 +15,7 @@ public class RatioBox : IButton
     private Vector2 _size;
     private Vector2 _drawingScale;
 
-    public float Scale => _extendedScale * _extendedScale;
+    public float Scale => _extendedScale * _initialScale;
     private Microsoft.Xna.Framework.Color _color;
     private Rectangle _imageLocation;
 
@@ -130,9 +130,9 @@ public class RatioBox : IButton
     public Microsoft.Xna.Framework.Color[] GetColor()
         => [_color];
 
-    public void SetScale(float scale)
+    public void SetScale(ScaleProvider provider)
     {
-        _extendedScale = scale;
+        _extendedScale = provider.Scale;
         _size = ImageSize * Scale;
         _drawingScale = Vector2.One * Scale;
         _rectangle = this.GetRectangle();

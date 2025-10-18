@@ -9,10 +9,9 @@ public class BasicText : IColorable, IMoveable, IManageable, IScaleable
     private List<Letter> _letters;
     private string _text;
     protected readonly int Spacing;
-    private readonly float _letterScale;
     private float _extendedScale = 1F;
-    private float _fullBaseScale;
-    public float Scale => _fullBaseScale;
+    private readonly float _baseScale;
+    public float Scale => _baseScale * _extendedScale;
 
     public Vector2 Position;
     public Vector2 Size;
@@ -24,7 +23,7 @@ public class BasicText : IColorable, IMoveable, IManageable, IScaleable
 
     public int Length => _letters.Count;
 
-    public static float DefaultLetterScale { get; set; } = 2F;
+    private readonly static float DefaultLetterScale = 2F;
 
     public BasicText(float scale) : this(string.Empty, Vector2.Zero, scale, 1)
     {
@@ -50,8 +49,7 @@ public class BasicText : IColorable, IMoveable, IManageable, IScaleable
     {
         _text = text;
         Spacing = spacing;
-        _letterScale = scale;
-        _fullBaseScale = _letterScale * _extendedScale;
+        _baseScale = scale;
         Position = position;
         ChangeText(text);
     }
@@ -59,7 +57,7 @@ public class BasicText : IColorable, IMoveable, IManageable, IScaleable
     public void ChangeText(string text)
     {
         _text = text;
-        var letters = Letter.Parse(text, _fullBaseScale);
+        var letters = Letter.Parse(text, Scale);
 
         int length = 0;
         int index = 0;
@@ -70,7 +68,7 @@ public class BasicText : IColorable, IMoveable, IManageable, IScaleable
             letter.Move(position + new Vector2(0, letter.FullSize.Y) - new Vector2(0, letter.Rectangle.Height));
             if (_letters is not null && _letters.Count > index)
                 letter.DrawColor = _letters[index++].DrawColor;
-            length += (int)(letter.Size.X + Spacing * _fullBaseScale);
+            length += (int)(letter.Size.X + Spacing * Scale);
         }
 
         _letters = letters;
@@ -161,10 +159,9 @@ public class BasicText : IColorable, IMoveable, IManageable, IScaleable
         }
     }
 
-    public virtual void SetScale(float scale)
+    public virtual void SetScale(ScaleProvider provider)
     {
-        _extendedScale = scale;
-        _fullBaseScale = _letterScale * _extendedScale;
+        _extendedScale = provider.Scale;
         ChangeText(_text);
     }
 }

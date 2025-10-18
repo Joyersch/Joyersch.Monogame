@@ -15,7 +15,7 @@ public sealed class LockButtonAddon : ButtonAddon
 
     public LockButtonAddon(IButton button, float scale = 1F) : base(button)
     {
-        _basicText = new BasicText("[locklocked]", GetPosition(), scale * BasicText.DefaultLetterScale);
+        _basicText = new BasicText("[locklocked]", GetPosition(), scale);
 
         button.Enter += _ => InvokeEnter();
         button.Click += delegate
@@ -80,9 +80,9 @@ public sealed class LockButtonAddon : ButtonAddon
         _savedButtonColor = input[0];
     }
 
-    public override void SetScale(float scale)
+    public override void SetScale(ScaleProvider provider)
     {
-        base.SetScale(scale);
-        _basicText.SetScale(scale);
+        base.SetScale(provider);
+        _basicText.SetScale(provider);
     }
 }

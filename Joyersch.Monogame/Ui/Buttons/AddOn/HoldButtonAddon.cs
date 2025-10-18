@@ -18,7 +18,7 @@ public sealed class HoldButtonAddon : ButtonAddon
     {
         _startTime = startTime;
         _time = _startTime;
-        _timer = new BasicText($"{_startTime / 1000F:n2}", button.GetPosition(), scale * BasicText.DefaultLetterScale);
+        _timer = new BasicText($"{_startTime / 1000F:n2}", button.GetPosition(), scale * 2f);
 
         button.Click += delegate
         {
@@ -73,9 +73,9 @@ public sealed class HoldButtonAddon : ButtonAddon
         _timer.Move(newPosition);
     }
 
-    public override void SetScale(float scale)
+    public override void SetScale(ScaleProvider provider)
     {
-        base.SetScale(scale);
-        _timer.SetScale(scale);
+        base.SetScale(provider);
+        _timer.SetScale(provider);
     }
 }

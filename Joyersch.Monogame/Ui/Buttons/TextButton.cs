@@ -25,7 +25,7 @@ public class TextButton<T> : IButton where T : IButton
         Button.Leave += _ => Leave?.Invoke(this);
         Button.Enter += _ => Enter?.Invoke(this);
         Button.Click += _ => Click?.Invoke(this);
-        Text = new BasicText(text, scale * BasicText.DefaultLetterScale);
+        Text = new BasicText(text, scale * 2f);
         Text.InRectangle(Button)
             .OnCenter()
             .Centered()
@@ -86,9 +86,9 @@ public class TextButton<T> : IButton where T : IButton
     public Microsoft.Xna.Framework.Color[] GetColor()
         => Button.GetColor();
 
-    public virtual void SetScale(float scale)
+    public virtual void SetScale(ScaleProvider provider)
     {
-        Button.SetScale(scale);
-        Text.SetScale(scale);
+        Button.SetScale(provider);
+        Text.SetScale(provider);
     }
 }

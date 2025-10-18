@@ -119,9 +119,9 @@ public sealed class SquareButton : IButton
     public Microsoft.Xna.Framework.Color[] GetColor()
         => [_color];
 
-    public void SetScale(float scale)
+    public void SetScale(ScaleProvider provider)
     {
-        _extendedScale = scale;
+        _extendedScale = provider.Scale;
         _size = ImageSize * Scale;
         _drawingScale = Vector2.One * Scale;
         _rectangle = this.GetRectangle();

@@ -8,7 +8,7 @@ public sealed class Checkbox : TextButton<SquareButton>
 
     public event Action<bool> ValueChanged;
 
-    public static float DefaultScale { get; set; } = 4F;
+    private readonly static float DefaultScale = 4F;
 
     public Microsoft.Xna.Framework.Color CheckedColor { get; set; } = Microsoft.Xna.Framework.Color.Green;
     public Microsoft.Xna.Framework.Color UncheckedColor { get; set; } = Microsoft.Xna.Framework.Color.Red;
@@ -22,19 +22,15 @@ public sealed class Checkbox : TextButton<SquareButton>
 
     public bool UseTexture { get; set; } = false;
 
-    public Checkbox() : this(false)
+    public Checkbox() : this(1f)
     {
     }
-
-    public Checkbox(float scale) : this(scale, false)
+    
+    public Checkbox(bool state) : this(DefaultScale, state:state)
     {
     }
-
-    public Checkbox(bool state) : this(DefaultScale, state)
-    {
-    }
-
-    public Checkbox(float scale, bool state) : base(string.Empty, new SquareButton(Vector2.Zero, scale))
+    
+    public Checkbox(float scale, float textScale = 1f, bool state = false) : base(string.Empty, textScale, new SquareButton(Vector2.Zero, scale))
     {
         _checked = state;
         if (!UseTexture)
@@ -69,9 +65,8 @@ public sealed class Checkbox : TextButton<SquareButton>
     public bool Unchecked()
         => _checked = false;
 
-    public override void SetScale(float scale)
+    public override void SetScale(ScaleProvider provider)
     {
-        base.SetScale(scale);
-        Text.SetScale(scale);
+        base.SetScale(provider);
     }
 }

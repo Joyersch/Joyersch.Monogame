@@ -1,6 +1,6 @@
 namespace Joyersch.Monogame;
 
-public interface IUserInferface : IManageable, IInteractable, IMoveable
+public interface IUserInferface : IManageable, IInteractable, IMoveable, IScaleable
 {
 
 }

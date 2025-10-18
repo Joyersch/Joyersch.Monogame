@@ -6,7 +6,7 @@ namespace Joyersch.Monogame.Ui.Text;
 public sealed class ClickableText : BasicText, IInteractable, IHitbox
 {
     private readonly float _scale;
-    private float _extendedScale;
+    private float _extendedScale = 1f;
     public event Action<object>? Leave;
     public event Action<object>? Enter;
     public event Action<object>? Click;
@@ -92,10 +92,10 @@ public sealed class ClickableText : BasicText, IInteractable, IHitbox
         _highlight.ChangeColor(color);
     }
 
-    public override void SetScale(float scale)
+    public override void SetScale(ScaleProvider provider)
     {
-        base.SetScale(scale);
-        _highlight.SetScale(scale);
-        _extendedScale = scale;
+        base.SetScale(provider);
+        _highlight.SetScale(provider);
+        _extendedScale = provider.Scale;
     }
 }

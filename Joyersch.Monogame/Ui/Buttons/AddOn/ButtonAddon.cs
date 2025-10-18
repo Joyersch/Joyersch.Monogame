@@ -70,6 +70,6 @@ public class ButtonAddon : IButton
 
     public float Scale => Button.Scale;
 
-    public virtual void SetScale(float scale)
-        => Button.SetScale(scale);
+    public virtual void SetScale(ScaleProvider provider)
+        => Button.SetScale(provider);
 }

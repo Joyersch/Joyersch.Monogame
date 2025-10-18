@@ -70,7 +70,8 @@ public class ExtendedGame : Game
 
         if (SaveFile is not null && !SettingsAndSaveManager.LoadSaves())
             SettingsAndSaveManager.SaveSave();
-        
+        SettingsAndSaveManager.Load();
+
         TextProvider.Initialize();
     }
 
@@ -114,8 +115,12 @@ public class ExtendedGame : Game
 
     public void ApplyFullscreen(bool fullscreen)
     {
-        if (Graphics.IsFullScreen != fullscreen)
-            Graphics.ToggleFullScreen();
+        Graphics.IsFullScreen = fullscreen;
+
+        if (fullscreen)
+            Window.IsBorderless = true; // Workaround for Wayland
+
+        Graphics.ApplyChanges();
     }
 
     public void ApplyFixedStep(bool fixedStep)

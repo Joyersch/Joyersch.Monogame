@@ -18,6 +18,8 @@ public sealed class DelayedText : BasicText
     private float _waitedStartTime;
     public float StartAfter = 0;
 
+    public float Scale => _scale * _extendedScale;
+
     public bool IsPlaying { get; private set; }
 
     public bool HasPlayed { get; private set; }
@@ -103,12 +105,12 @@ public sealed class DelayedText : BasicText
     }
 
     public BasicText GetFullBaseCopy()
-        => new BasicText(_toDisplayText, Position, _scale * _extendedScale, Spacing);
+        => new BasicText(_toDisplayText, Position, Scale, Spacing);
 
-    public override void SetScale(float scale)
+    public override void SetScale(ScaleProvider provider)
     {
-        base.SetScale(scale);
-        _extendedScale = scale;
+        base.SetScale(provider);
+        _extendedScale = provider.Scale;
         _fullSize = GetFullBaseCopy().GetSize();
     }
 }

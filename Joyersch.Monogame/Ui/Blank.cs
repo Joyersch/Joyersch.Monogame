@@ -7,11 +7,13 @@ namespace Joyersch.Monogame.Ui;
 public class Blank : IManageable, IMoveable, IRotateable, ILayerable, IColorable, IHitbox, IScaleable
 {
     private Vector2 _position;
-    private Vector2 _baseSize;
+    private Vector2 _baseSize = Vector2.One;
     private Vector2 _size;
 
-    public float Scale { private set; get; } = 1F;
-
+    private float _initialScale = 1f;
+    private float _extendedScale = 1f;
+    public float Scale => _initialScale * _extendedScale;
+    
     public Microsoft.Xna.Framework.Color Color { get; set; }
 
     public float Layer { get; set; }
@@ -26,11 +28,11 @@ public class Blank : IManageable, IMoveable, IRotateable, ILayerable, IColorable
 
     public static Texture2D Texture;
 
-    public Blank(Vector2 position, Vector2 size, string identifier = "")
+    public Blank(Vector2 position, float scale = 1f, string identifier = "")
     {
         _position = position;
-        _baseSize = size;
-        _size = _baseSize * Scale;
+        _initialScale = scale;
+        _size = _baseSize * _initialScale;
         Identifier = identifier;
         Color = new Microsoft.Xna.Framework.Color(0, 0, 0, 150);
         Rectangle = this.GetRectangle();
@@ -49,7 +51,7 @@ public class Blank : IManageable, IMoveable, IRotateable, ILayerable, IColorable
             Color,
             Rotation,
             Vector2.Zero,
-            _size,
+            Scale,
             SpriteEffects.None,
             Layer);
     }
@@ -79,9 +81,9 @@ public class Blank : IManageable, IMoveable, IRotateable, ILayerable, IColorable
     public Microsoft.Xna.Framework.Color[] GetColor()
         => [Color];
 
-    public void SetScale(float scale)
+    public void SetScale(ScaleProvider provider)
     {
-        Scale = scale;
+        _extendedScale = provider.Scale;
         _size = _baseSize * Scale;
         Rectangle = this.GetRectangle();
     }

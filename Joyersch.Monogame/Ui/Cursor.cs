@@ -9,9 +9,9 @@ public sealed class Cursor : IMoveable, IHitbox, ILayerable, IManageable, IScale
     private Vector2 _position;
     private readonly float _initialScale;
     private float _extendedScale = 1F;
-    private Vector2 _drawingScale;
+    private Vector2 _drawingScale => new(Scale);
     public float Scale => _initialScale * _extendedScale;
-    private Vector2 _baseSize = new Vector2(7, 10);
+    private Vector2 _baseSize = new(7, 10);
     private Vector2 _size;
 
     private Microsoft.Xna.Framework.Color _color;
@@ -41,8 +41,7 @@ public sealed class Cursor : IMoveable, IHitbox, ILayerable, IManageable, IScale
     {
         _position = position;
         _initialScale = initialScale;
-        _size = _baseSize * Scale;
-        _drawingScale = Vector2.One * Scale;
+        _size = _baseSize * initialScale;
 
         var box = new Rectangle(0, 0, 1, 1);
         var hitbox = new[] { box };
@@ -65,7 +64,7 @@ public sealed class Cursor : IMoveable, IHitbox, ILayerable, IManageable, IScale
             _color,
             0F,
             Vector2.Zero,
-            _drawingScale,
+            Scale,
             SpriteEffects.None,
             Layer);
     }
@@ -81,11 +80,10 @@ public sealed class Cursor : IMoveable, IHitbox, ILayerable, IManageable, IScale
         _position = newPosition;
     }
 
-    public void SetScale(float scale)
+    public void SetScale(ScaleProvider provider)
     {
-        _extendedScale = scale;
+        _extendedScale = provider.Scale;
         _size = _baseSize * Scale;
-        _drawingScale = Vector2.One * Scale;
         _rectangle = this.GetRectangle();
         _hitboxProvider.SetScale(_drawingScale);
     }

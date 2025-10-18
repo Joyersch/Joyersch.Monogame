@@ -7,10 +7,10 @@ namespace Joyersch.Monogame;
 
 public static class TextNotationProcessor
 {
-    public static BasicText Parse(string input)
+    public static BasicText Parse(string input, float scale)
     {
         string newText = input;
-        float scale = 1F;
+        float textScale = 1F;
         int headingLevel = 0;
 
         while (newText.StartsWith("#"))
@@ -26,7 +26,7 @@ public static class TextNotationProcessor
 
         if (headingLevel > 0)
         {
-            scale = 5 - headingLevel;
+            textScale = 5 - headingLevel;
         }
 
         ColorBuilder builder = new ColorBuilder();
@@ -47,7 +47,7 @@ public static class TextNotationProcessor
         builder.AddColor(color, newText.Length - colorIndex);
         cleanText += newText[colorIndex..newText.Length];
 
-        var text = new  BasicText(cleanText, scale * 0.5F * BasicText.DefaultLetterScale);
+        var text = new  BasicText(cleanText, textScale * scale);
         text.ChangeColor(builder.GetColor());
         return text;
     }

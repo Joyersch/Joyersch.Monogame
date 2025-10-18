@@ -1,4 +1,5 @@
 ﻿using System.Text.RegularExpressions;
+using Joyersch.Monogame.Logging;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
@@ -35,7 +36,7 @@ public class Letter : IMoveable, IManageable, IRotateable
         _rectangle = new Rectangle(Position.ToPoint(), Size.ToPoint());
     }
 
-    public void ChangeLetter(string identifier)
+    private void ChangeLetter(string identifier)
     {
         _resolvedTexture = null;
         _resolvedLocation = Rectangle.Empty;
@@ -72,7 +73,7 @@ public class Letter : IMoveable, IManageable, IRotateable
 
     public void Update(GameTime gameTime)
     {
-        _rectangle = new Rectangle(Position.ToPoint(), Size.ToPoint());
+        // Nothing to do
     }
 
     public void Draw(SpriteBatch spriteBatch)
@@ -135,9 +136,4 @@ public class Letter : IMoveable, IManageable, IRotateable
 
     public override string ToString()
         => Identifier;
-
-    public void UseTextureData(TextureDataCallback callback)
-        => callback.Invoke(_resolvedTexture, ref _resolvedLocation);
-
-    public delegate void TextureDataCallback(Texture2D texture, ref Rectangle rectangle);
 }
