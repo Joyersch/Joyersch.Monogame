@@ -24,6 +24,7 @@ public static class Global
         SquareButton.Texture = content.GetTexture("Button/square");
         RatioBox.Texture = content.GetTexture("Button/ratio");
         Blank.Texture = content.GetTexture("Dot");
+        MousePointer.Texture = content.GetTexture("mousepoint");
 
         Letter.Initialize();
     }

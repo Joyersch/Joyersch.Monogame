@@ -11,26 +11,21 @@ public sealed class ScaleDeviceHandler
     private readonly GraphicsDeviceManager _graphicsDeviceManager;
     private readonly GraphicsDevice _graphicsDevice;
     private readonly GraphicsAdapter _graphicsAdapter;
+    private readonly GameWindow _window;
 
-    public event Action ScaleChanged;
+    private readonly ScaleProvider _scaleProvider;
 
-    public ScaleDeviceHandler(Scene scene, GraphicsDeviceManager graphicsDeviceManager, GraphicsDevice graphicsDevice, GraphicsAdapter graphicsAdapter)
+    public event Action<ScaleProvider> ScaleChanged;
+
+    public ScaleDeviceHandler(Scene scene, GraphicsDeviceManager graphicsDeviceManager, GraphicsDevice graphicsDevice,
+        GraphicsAdapter graphicsAdapter, GameWindow window)
     {
         _scene = scene;
         _graphicsDeviceManager = graphicsDeviceManager;
         _graphicsDevice = graphicsDevice;
         _graphicsAdapter = graphicsAdapter;
-        Log.Information("Before applying settings");
-        Log.Warning("Adapter: " +_graphicsAdapter.CurrentDisplayMode.Width + "x" + _graphicsAdapter.CurrentDisplayMode.Height);
-        Log.Warning("Scene scale: " +scene.Display.Scale.ToString());
-        Log.Warning("DeviceManager: "+_graphicsDeviceManager.PreferredBackBufferWidth + "x" + _graphicsDeviceManager.PreferredBackBufferHeight);
-        Log.Information("----------------------------");
-        Log.Information("AllowedModes");
-        foreach (var mode in _graphicsAdapter.SupportedDisplayModes)
-        {
-            if (mode.AspectRatio == 16f/9f)
-            Log.Information($"{mode.Width}x{mode.Height}");
-        }
+        _window = window;
+        _scaleProvider = new ScaleProvider(scene);
     }
 
     public ScaleDeviceHandler ScaleToScreen(float scale = 1F)
@@ -38,32 +33,24 @@ public sealed class ScaleDeviceHandler
         _graphicsDeviceManager.PreferredBackBufferWidth = (int)(_graphicsAdapter.CurrentDisplayMode.Width * scale);
         _graphicsDeviceManager.PreferredBackBufferHeight = (int)(_graphicsAdapter.CurrentDisplayMode.Height * scale);
         _graphicsDeviceManager.ApplyChanges();
-        
-        ScaleChanged?.Invoke();
+
+        ScaleChanged?.Invoke(_scaleProvider);
         return this;
     }
 
     public ScaleDeviceHandler Fullscreen()
     {
-        if (!_graphicsDeviceManager.IsFullScreen)
-            _graphicsDeviceManager.ToggleFullScreen();
-        //Log.Information("After applying settings");
-        //Log.Warning("Adapter: " +_graphicsAdapter.CurrentDisplayMode.Width + "x" + _graphicsAdapter.CurrentDisplayMode.Height);
-        //Log.Warning("Scene scale: " +_scene.Display.Scale.ToString());
-        //Log.Warning("DeviceManager: "+_graphicsDeviceManager.PreferredBackBufferWidth + "x" + _graphicsDeviceManager.PreferredBackBufferHeight);
-        //Log.Information("----------------------------");
+        _graphicsDeviceManager.IsFullScreen = true;
+        _window.IsBorderless = true;
+        _graphicsDeviceManager.ApplyChanges();
         return this;
     }
 
     public ScaleDeviceHandler Windowed()
     {
-       if (_graphicsDeviceManager.IsFullScreen)
-           _graphicsDeviceManager.ToggleFullScreen();
-       //Log.Information("After applying settings");
-        // Log.Warning("Adapter: " +_graphicsAdapter.CurrentDisplayMode.Width + "x" + _graphicsAdapter.CurrentDisplayMode.Height);
-        //Log.Warning("Scene scale: " +_scene.Display.Scale.ToString());
-        //Log.Warning("DeviceManager: "+_graphicsDeviceManager.PreferredBackBufferWidth + "x" + _graphicsDeviceManager.PreferredBackBufferHeight);
-        // Log.Information("----------------------------");
+        _graphicsDeviceManager.IsFullScreen = false;
+        _window.IsBorderless = false;
+        _graphicsDeviceManager.ApplyChanges();
         return this;
     }
 
@@ -74,14 +61,8 @@ public sealed class ScaleDeviceHandler
         _graphicsDeviceManager.ApplyChanges();
 
         _scene.Display.Update();
-        //_scene.Camera.Calculate();
-        
-        // Log.Information("After applying settings");
-        //Log.Warning("Adapter: " +_graphicsAdapter.CurrentDisplayMode.Width + "x" + _graphicsAdapter.CurrentDisplayMode.Height);
-        //Log.Warning("Scene scale: " +_scene.Display.Scale.ToString());
-        //Log.Warning("DeviceManager: "+_graphicsDeviceManager.PreferredBackBufferWidth + "x" + _graphicsDeviceManager.PreferredBackBufferHeight);
-        //Log.Information("----------------------------");
+        _scene.Camera.Calculate();
 
-        ScaleChanged?.Invoke();
+        ScaleChanged?.Invoke(_scaleProvider);
     }
 }
