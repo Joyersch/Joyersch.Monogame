@@ -116,9 +116,8 @@ public class ExtendedGame : Game
     public void ApplyFullscreen(bool fullscreen)
     {
         Graphics.IsFullScreen = fullscreen;
-
-        if (fullscreen)
-            Window.IsBorderless = true; // Workaround for Wayland
+        // Workaround for wayland on linux
+        Window.IsBorderless = fullscreen;
 
         Graphics.ApplyChanges();
     }
