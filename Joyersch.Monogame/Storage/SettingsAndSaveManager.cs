@@ -12,6 +12,8 @@ public sealed class SettingsAndSaveManager<T>
     private readonly Dictionary<string, object> _saves;
     private readonly List<Type> _settingsImplementations;
     private readonly List<Type> _savesImplementations;
+    private readonly IFileFormatHandler _fileFormatHandlerSave;
+    private readonly IFileFormatHandler _fileFormatHandlerSettings;
 
     public string SaveFilePrefix { get; set; } = "save";
 
@@ -27,6 +29,8 @@ public sealed class SettingsAndSaveManager<T>
         _saves = new Dictionary<string, object>();
         _settingsImplementations = new List<Type>();
         _savesImplementations = new List<Type>();
+        _fileFormatHandlerSave = new JsonFileFormatHandler();
+        _fileFormatHandlerSettings = new JsonFileFormatHandler();
 
         var settingsType = typeof(ISettings);
         var saveType = typeof(ISave);
@@ -86,22 +90,22 @@ public sealed class SettingsAndSaveManager<T>
         if (_saveFileIndex is null)
             return;
         string filePath = $@"{_basePath}/{SaveFilePrefix}{_saveFileIndex}.{SaveFileType}";
-        SaveFile(filePath, _saves);
+        SaveFile(filePath, _saves, _fileFormatHandlerSave);
     }
 
     public void SaveSettings()
     {
         string filePath = $@"{_basePath}/settings.{SettingsFileType}";
-        SaveFile(filePath, _settings);
+        SaveFile(filePath, _settings, _fileFormatHandlerSettings);
     }
 
-    private static void SaveFile(string filePath, Dictionary<string, object> collection)
+    private static void SaveFile(string filePath, Dictionary<string, object> collection, IFileFormatHandler formatHandler)
     {
         FileStream stream = null;
         if (!File.Exists(filePath))
             stream = File.Create(filePath);
 
-        string file = Newtonsoft.Json.JsonConvert.SerializeObject(collection);
+        string file = System.Text.Encoding.Default.GetString(formatHandler.WriteFile(collection));
         using StreamWriter writer = stream is null ? new StreamWriter(filePath) : new StreamWriter(stream);
         writer.Write(file);
     }
@@ -120,44 +124,23 @@ public sealed class SettingsAndSaveManager<T>
             return false;
         string filePath = $@"{_basePath}/{SaveFilePrefix}{_saveFileIndex}.{SaveFileType}";
 
-        return LoadFile(filePath, _saves, _savesImplementations);
+        return LoadFile(filePath, _saves, _savesImplementations, _fileFormatHandlerSave);
     }
 
     public bool LoadSettings()
     {
         string filePath = $@"{_basePath}/settings.{SettingsFileType}";
 
-        return LoadFile(filePath, _settings, _settingsImplementations);
+        return LoadFile(filePath, _settings, _settingsImplementations, _fileFormatHandlerSettings);
     }
 
-    private static bool LoadFile(string filePath, Dictionary<string, object> collection, List<Type> implementations)
+    private static bool LoadFile(string filePath, Dictionary<string, object> collection, List<Type> implementations, IFileFormatHandler formatHandler)
     {
         if (!File.Exists(filePath))
             return false;
 
-        string json = File.ReadAllText(filePath);
-        JObject jsonObject = JObject.Parse(json);
-
-        foreach (var pair in jsonObject)
-        {
-            try
-            {
-                string key = pair.Key;
-                JToken value = pair.Value;
-
-                Type settingsType = implementations.First(i => i.Namespace.Split('.')[^1] + "." + i.Name == key);
-                if (settingsType != null && collection.ContainsKey(key))
-                {
-                    object instance = JsonConvert.DeserializeObject(value.ToString(), settingsType);
-                    collection[key] = instance;
-                }
-            }
-            catch (Exception exception)
-            {
-                Log.Error($"Error while loading file with pair: {pair.Key} into: {nameof(collection)}");
-                Log.Error(exception.Message);
-            }
-        }
+        string file = File.ReadAllText(filePath);
+            formatHandler.ReadFile(implementations.ToArray(), collection, System.Text.Encoding.Default.GetBytes(file));
 
         return true;
     }
