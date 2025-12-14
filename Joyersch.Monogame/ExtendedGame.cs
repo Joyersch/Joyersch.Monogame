@@ -13,6 +13,8 @@ public class ExtendedGame : Game
 
     protected Scene Scene;
     protected SettingsAndSaveManager<string> SettingsAndSaveManager;
+    protected IFileFormatHandler? saveFormatHandler = null;
+    protected IFileFormatHandler? settingsHandler = null;
 
     protected DevConsole Console;
     protected bool IsConsoleActive;
@@ -60,7 +62,7 @@ public class ExtendedGame : Game
         Console = new DevConsole(Global.CommandProcessor, Scene, Console);
         Log.Out = new LogAdapter(Console);
 
-        SettingsAndSaveManager = new SettingsAndSaveManager<string>(SaveDirectory, SaveFile);
+        SettingsAndSaveManager = new SettingsAndSaveManager<string>(SaveDirectory, SaveFile, saveFormatHandler, settingsHandler);
         SettingsAndSaveManager.SetSaveFile(SaveFile);
         SettingsAndSaveManager.SaveFilePrefix = SavePrefix;
         SettingsAndSaveManager.SaveFileType = SaveType;
@@ -115,10 +117,9 @@ public class ExtendedGame : Game
 
     public void ApplyFullscreen(bool fullscreen)
     {
-        Graphics.IsFullScreen = fullscreen;
         // Workaround for wayland on linux
         Window.IsBorderless = fullscreen;
-
+        Graphics.IsFullScreen = fullscreen;
         Graphics.ApplyChanges();
     }
 

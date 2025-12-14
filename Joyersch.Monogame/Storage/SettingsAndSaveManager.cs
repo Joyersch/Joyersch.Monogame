@@ -21,7 +21,7 @@ public sealed class SettingsAndSaveManager<T>
 
     public string SettingsFileType { get; set; } = "json";
 
-    public SettingsAndSaveManager(string basePath, T saveFileIndex)
+    public SettingsAndSaveManager(string basePath, T saveFileIndex, IFileFormatHandler? saveHandler = null, IFileFormatHandler? settingsHandler = null)
     {
         _basePath = basePath;
         _saveFileIndex = saveFileIndex;
@@ -29,8 +29,8 @@ public sealed class SettingsAndSaveManager<T>
         _saves = new Dictionary<string, object>();
         _settingsImplementations = new List<Type>();
         _savesImplementations = new List<Type>();
-        _fileFormatHandlerSave = new JsonFileFormatHandler();
-        _fileFormatHandlerSettings = new JsonFileFormatHandler();
+        _fileFormatHandlerSave = saveHandler ?? new JsonFileFormatHandler();
+        _fileFormatHandlerSettings = settingsHandler ?? new JsonFileFormatHandler();
 
         var settingsType = typeof(ISettings);
         var saveType = typeof(ISave);

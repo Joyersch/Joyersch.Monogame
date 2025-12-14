@@ -48,8 +48,8 @@ public sealed class ScaleDeviceHandler
 
     public ScaleDeviceHandler Windowed()
     {
-        _graphicsDeviceManager.IsFullScreen = false;
         _window.IsBorderless = false;
+        _graphicsDeviceManager.IsFullScreen = false;
         _graphicsDeviceManager.ApplyChanges();
         return this;
     }
