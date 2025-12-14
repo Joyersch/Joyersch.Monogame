@@ -1,8 +1,4 @@
-﻿using Joyersch.Monogame.Console;
-using Joyersch.Monogame.Logging;
-using Joyersch.Monogame.Ui;
-using Joyersch.Monogame.Ui.Buttons;
-using Joyersch.Monogame.Ui.Text;
+﻿using Joyersch.Monogame.Logging;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 
@@ -10,23 +6,9 @@ namespace Joyersch.Monogame;
 
 public static class Global
 {
-    public static readonly CommandProcessor CommandProcessor = new();
-
     public static void Initialize(ContentManager content)
     {
-        SampleObject.Texture = content.GetTexture("placeholder");
-        Cursor.Texture = content.GetTexture("cursor");
-
-        DefaultLetters.Texture = content.GetTexture("Font/DefaultLetters");
-        ActionSymbols.Texture = content.GetTexture("Font/ActionSymbols");
-        ButtonAddonIcons.Texture = content.GetTexture("Font/ButtonAddons");
-        SampleButton.Texture = content.GetTexture("Button/empty");
-        SquareButton.Texture = content.GetTexture("Button/square");
-        RatioBox.Texture = content.GetTexture("Button/ratio");
-        Blank.Texture = content.GetTexture("Dot");
-        MousePointer.Texture = content.GetTexture("mousepoint");
-
-        Letter.Initialize();
+        // To be filled!
     }
 
     public static string ReadFromResources(string file)

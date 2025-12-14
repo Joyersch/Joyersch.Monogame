@@ -4,9 +4,7 @@ namespace Joyersch.Monogame.Logging;
 
 public static class Log
 {
-    public static LogAdapter Out { get; set; }
-    private static string LeftBracket => Out.IsConsole ? "[SBO]" : "[";
-    private static string RightBracket => Out.IsConsole ? "[SBC]" : "]";
+    public static ILogAdapter Out { get; set; }
 
     public static void Write(string msg)
     {
@@ -20,34 +18,34 @@ public static class Log
         Out.Write(msg);
     }
 
-    public static void WriteColor(string msg, Color[] colors)
+    public static void WriteColor(string msg, Color color)
     {
         Out.SetLine(-1);
-        Out.WriteColor(msg, colors);
+        Out.WriteColor(msg, color);
     }
 
     public static void Error(string msg)
     {
         Out.SetLine(-1);
 
-        Out.WriteColor($"{LeftBracket}Error{RightBracket} {msg}", Color.Red);
+        Out.WriteColor($"{Out.LeftBracket}Error{Out.RightBracket} {msg}", Color.Red);
     }
 
     public static void Critical(string msg)
     {
         Out.SetLine(-1);
-        Out.WriteColor($"{LeftBracket}Critical{RightBracket} {msg}", Color.DarkRed);
+        Out.WriteColor($"{Out.LeftBracket}Critical{Out.RightBracket} {msg}", Color.DarkRed);
     }
 
     public static void Warning(string msg)
     {
         Out.SetLine(-1);
-        Out.WriteColor($"{LeftBracket}Warning{RightBracket} {msg}", Color.Gold);
+        Out.WriteColor($"{Out.LeftBracket}Warning{Out.RightBracket} {msg}", Color.Gold);
     }
 
     public static void Information(string msg)
     {
         Out.SetLine(-1);
-        Out.WriteColor($"{LeftBracket}Info{RightBracket} {msg}", Color.DeepSkyBlue);
+        Out.WriteColor($"{Out.LeftBracket}Info{Out.RightBracket} {msg}", Color.DeepSkyBlue);
     }
 }
