@@ -8,44 +8,36 @@ public static class Log
 
     public static void Write(string msg)
     {
-        Out.SetLine(-1);
         Out.Write(msg);
     }
 
     public static void WriteLine(string msg, int line)
     {
-        Out.SetLine(line);
         Out.Write(msg);
     }
 
     public static void WriteColor(string msg, Color color)
     {
-        Out.SetLine(-1);
         Out.WriteColor(msg, color);
     }
 
-    public static void Error(string msg)
+    public static void Error(object msg)
     {
-        Out.SetLine(-1);
-
         Out.WriteColor($"{Out.LeftBracket}Error{Out.RightBracket} {msg}", Color.Red);
     }
 
-    public static void Critical(string msg)
+    public static void Critical(object msg)
     {
-        Out.SetLine(-1);
         Out.WriteColor($"{Out.LeftBracket}Critical{Out.RightBracket} {msg}", Color.DarkRed);
     }
 
-    public static void Warning(string msg)
+    public static void Warning(object msg)
     {
-        Out.SetLine(-1);
         Out.WriteColor($"{Out.LeftBracket}Warning{Out.RightBracket} {msg}", Color.Gold);
     }
 
-    public static void Information(string msg)
+    public static void Information(object msg)
     {
-        Out.SetLine(-1);
         Out.WriteColor($"{Out.LeftBracket}Info{Out.RightBracket} {msg}", Color.DeepSkyBlue);
     }
 }
