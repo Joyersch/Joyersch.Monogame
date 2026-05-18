@@ -21,4 +21,7 @@ public static class ContentManagerExtensions
 
     public static Effect GetEffect(this Microsoft.Xna.Framework.Content.ContentManager contentManager, string name)
         => contentManager.Load<Effect>("Shaders/" + name);
+    
+    public static SpriteFont GetFont(this Microsoft.Xna.Framework.Content.ContentManager contentManager, string name)
+        => contentManager.Load<SpriteFont>("Fonts/" + name);
 }
